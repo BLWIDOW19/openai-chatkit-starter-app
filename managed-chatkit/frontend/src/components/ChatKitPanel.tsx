@@ -13,7 +13,7 @@ export function ChatKitPanel() {
   });
 
   return (
-    <div className="flex h-[90vh] w-full rounded-2xl bg-white shadow-sm transition-colors dark:bg-slate-900">
+    <div className="flex h-[100dvh] w-full bg-white transition-colors dark:bg-slate-900 md:h-[90vh] md:rounded-2xl md:shadow-sm">
       <ChatKit control={chatkit.control} className="h-full w-full" />
     </div>
   );
