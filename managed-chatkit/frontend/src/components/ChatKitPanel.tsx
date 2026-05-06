@@ -2,8 +2,6 @@ import { useMemo } from "react";
 import { ChatKit, useChatKit } from "@openai/chatkit-react";
 import { createClientSecretFetcher, workflowId } from "../lib/chatkitSession";
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CHATKIT_PUBLISHABLE_KEY;
-
 export function ChatKitPanel() {
   const getClientSecret = useMemo(
     () => createClientSecretFetcher(workflowId),
@@ -11,10 +9,7 @@ export function ChatKitPanel() {
   );
 
   const chatkit = useChatKit({
-    api: { 
-      getClientSecret,
-      domainKey: PUBLISHABLE_KEY,
-    },
+    api: { getClientSecret },
   });
 
   return (
