@@ -44,7 +44,12 @@ async def create_session(request: Request) -> JSONResponse:
     if not workflow_id:
         return respond({"error": "Missing workflow id"}, 400)
 
-    user_id, cookie_value = resolve_user(request.cookies)
+    body_group_id = body.get("group_id")
+    if body_group_id and isinstance(body_group_id, str) and body_group_id.strip():
+        user_id = body_group_id.strip()
+        cookie_value = None
+    else:
+        user_id, cookie_value = resolve_user(request.cookies)
     api_base = chatkit_api_base()
 
     try:

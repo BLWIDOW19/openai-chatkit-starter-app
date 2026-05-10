@@ -16,10 +16,16 @@ export function createClientSecretFetcher(
   return async (currentSecret: string | null) => {
     if (currentSecret) return currentSecret;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get("group");
+
     const response = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ workflow: { id: workflow } }),
+      body: JSON.stringify({
+        workflow: { id: workflow },
+        ...(groupId ? { group_id: groupId } : {}),
+      }),
     });
 
     const payload = (await response.json().catch(() => ({}))) as {
