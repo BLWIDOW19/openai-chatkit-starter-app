@@ -56,7 +56,15 @@ async def create_session(request: Request) -> JSONResponse:
                     "OpenAI-Beta": "chatkit_beta=v1",
                     "Content-Type": "application/json",
                 },
-                json={"workflow": {"id": workflow_id}, "user": user_id},
+                json={
+    "workflow": {"id": workflow_id},
+    "user": user_id,
+    "chatkit_configuration": {
+        "file_upload": {
+            "enabled": True
+        }
+    }
+},
             )
     except httpx.RequestError as error:
         return respond(
