@@ -22,6 +22,7 @@ export function ChatKitPanel() {
   );
 
   const chatkit = useChatKit({
+    locale: 'he',
     api: { getClientSecret },
     initialThread: savedThread ?? undefined,
     onThreadChange: handleThreadChange,
