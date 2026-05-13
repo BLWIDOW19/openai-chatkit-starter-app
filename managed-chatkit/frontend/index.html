@@ -10,6 +10,21 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+  (function() {
+    var interval = setInterval(function() {
+      var el = document.querySelector('openai-chatkit');
+      if (el) {
+        clearInterval(interval);
+        if (el.shadowRoot) {
+          var s = document.createElement('style');
+          s.textContent = '* { direction: rtl !important; text-align: right !important; }';
+          el.shadowRoot.appendChild(s);
+        }
+      }
+    }, 300);
+  })();
+</script>
   </body>
 </html>
 
