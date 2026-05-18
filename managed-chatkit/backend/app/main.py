@@ -10,7 +10,8 @@ from typing import Any, Mapping
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
+from pathlib import Path
 
 DEFAULT_CHATKIT_BASE = "https://api.openai.com"
 SESSION_COOKIE_NAME = "chatkit_session_id"
@@ -30,7 +31,9 @@ app.add_middleware(
 @app.get("/health")
 async def health() -> Mapping[str, str]:
     return {"status": "ok"}
-
+@app.get("/quiz")
+async def quiz():
+    return HTMLResponse((Path(__file__).parent / "quiz.html").read_text(encoding="utf-8"))
 
 @app.post("/api/create-session")
 async def create_session(request: Request) -> JSONResponse:
