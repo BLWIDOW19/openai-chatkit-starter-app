@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מבחן ההיכרות המשפחתי</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #182235;
+      --muted: #566174;
+      --cream: #fff7e8;
+      --card: rgba(255, 255, 255, 0.86);
+      --yellow: #fff0b8;
+      --pink: #ffdce9;
+      --peach: #ffd0a8;
+      --shadow: 0 26px 80px rgba(99, 55, 22, 0.16);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, "Noto Sans Hebrew", sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(255, 214, 165, 0.95), transparent 28%),
+        radial-gradient(circle at 84% 16%, rgba(255, 220, 233, 0.95), transparent 26%),
+        radial-gradient(circle at 50% 96%, rgba(254, 240, 138, 0.95), transparent 36%),
+        linear-gradient(135deg, #fff9ed 0%, #fff2d7 48%, #ffe9f0 100%);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      padding: 22px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(48px);
+      opacity: 0.45;
+      pointer-events: none;
+      animation: floaty 9s ease-in-out infinite alternate;
+    }
+
+    .blob.one {
+      width: 250px;
+      height: 250px;
+      background: #f9a8d4;
+      left: -90px;
+      top: -70px;
+    }
+
+    .blob.two {
+      width: 300px;
+      height: 300px;
+      background: #fde68a;
+      right: -110px;
+      bottom: -100px;
+      animation-delay: 1.5s;
+    }
+
+    .blob.three {
+      width: 220px;
+      height: 220px;
+      background: #fdba74;
+      left: 45%;
+      top: 70px;
+      animation-delay: 0.7s;
+    }
+
+    @keyframes floaty {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(18px, -14px, 0) scale(1.08); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 980px;
+      min-height: calc(100vh - 44px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 15px;
+      font-weight: 900;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(10px);
+      margin-bottom: 12px;
+    }
+
+    .pill::before {
+      content: "✦";
+      color: #f59e0b;
+      font-size: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.15;
+      font-weight: 1000;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      min-height: 520px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82));
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 38px;
+      padding: clamp(24px, 5vw, 46px);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      backdrop-filter: blur(18px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      background: linear-gradient(135deg, #fbcfe8, #fed7aa);
+      border-radius: 999px;
+      left: -76px;
+      top: -76px;
+      filter: blur(22px);
+      opacity: 0.7;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: linear-gradient(135deg, #fef08a, #fde68a);
+      border-radius: 999px;
+      right: -92px;
+      bottom: -92px;
+      filter: blur(22px);
+      opacity: 0.78;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .count {
+      background: linear-gradient(135deg, #fff7cf, #ffe8a3);
+      border: 1px solid rgba(245, 158, 11, 0.14);
+      border-radius: 22px;
+      padding: 14px 22px;
+      font-size: clamp(17px, 2.2vw, 22px);
+      font-weight: 1000;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 10px 22px rgba(146, 64, 14, 0.08);
+    }
+
+    .emoji {
+      width: clamp(82px, 12vw, 122px);
+      height: clamp(82px, 12vw, 122px);
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #ffe4ed, #fff1bd);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 32px;
+      font-size: clamp(48px, 7vw, 70px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.86), 0 14px 32px rgba(190, 24, 93, 0.09);
+    }
+
+    h2 {
+      margin: 0 0 22px;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 1.02;
+      font-weight: 1000;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+    }
+
+    .question {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(25px, 4.5vw, 42px);
+      line-height: 1.42;
+      font-weight: 900;
+      color: #233047;
+      text-wrap: pretty;
+    }
+
+    .hint {
+      background: rgba(241, 245, 249, 0.92);
+      color: #334155;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 28px;
+      padding: 18px 22px;
+      font-size: clamp(17px, 2.5vw, 22px);
+      line-height: 1.55;
+      font-weight: 900;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    footer {
+      margin-top: 18px;
+    }
+
+    .progress-shell {
+      height: 14px;
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 7px rgba(15, 23, 42, 0.09), 0 8px 18px rgba(15, 23, 42, 0.04);
+      margin-bottom: 16px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #111827, #475569);
+      border-radius: 999px;
+      transition: width 260ms ease;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 16px 30px;
+      font-size: 19px;
+      font-weight: 1000;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.13);
+      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+      font-family: inherit;
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.16);
+    }
+
+    button:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn-light {
+      background: rgba(255,255,255,0.92);
+      color: var(--ink);
+    }
+
+    .btn-soft {
+      background: #fff1bf;
+      color: var(--ink);
+      padding-inline: 22px;
+      font-size: 16px;
+    }
+
+    .btn-dark {
+      background: linear-gradient(135deg, #111827, #263248);
+      color: white;
+    }
+
+    .intro-card {
+      min-height: 620px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .intro-emoji {
+      display: inline-grid;
+      place-items: center;
+      width: clamp(104px, 15vw, 148px);
+      height: clamp(104px, 15vw, 148px);
+      border-radius: 38px;
+      background: linear-gradient(135deg, #ffe4ed, #fff1bd);
+      font-size: clamp(62px, 9vw, 88px);
+      margin-bottom: 24px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 16px 34px rgba(190, 24, 93, 0.10);
+    }
+
+    .intro-title {
+      max-width: 830px;
+      margin: 0 auto 24px;
+      font-size: clamp(38px, 7vw, 76px);
+      line-height: 1.06;
+      font-weight: 1000;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    .intro-text {
+      max-width: 690px;
+      margin: 0 auto 34px;
+      font-size: clamp(19px, 3vw, 28px);
+      line-height: 1.5;
+      font-weight: 850;
+      color: var(--muted);
+      text-wrap: pretty;
+    }
+
+    .start-button {
+      padding: 18px 58px;
+      font-size: 24px;
+      margin-top: 8px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 14px 12px;
+      }
+
+      .wrap {
+        min-height: calc(100vh - 28px);
+      }
+
+      header {
+        margin-bottom: 12px;
+      }
+
+      .pill {
+        font-size: 13px;
+        padding: 9px 18px;
+      }
+
+      .card {
+        border-radius: 30px;
+        min-height: 548px;
+      }
+
+      .card-inner {
+        min-height: 488px;
+        gap: 24px;
+      }
+
+      .top-row {
+        align-items: flex-start;
+      }
+
+      .buttons {
+        gap: 8px;
+      }
+
+      button {
+        padding: 14px 18px;
+        font-size: 17px;
+      }
+
+      .btn-soft {
+        padding-inline: 14px;
+        font-size: 14px;
+      }
+
+      .intro-card {
+        min-height: 600px;
+      }
+
+      .start-button {
+        width: 100%;
+        max-width: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <div class="blob three"></div>
+
+  <main class="page">
+    <div class="wrap">
+      <section id="introScreen" class="stage">
+        <div class="card intro-card">
+          <div class="card-inner intro-card">
+            <div>
+              <div class="intro-emoji">👨‍👩‍👧‍👦</div>
+              <div class="pill">פעילות משפחתית</div>
+              <h1 class="intro-title">מבחן ההיכרות המשפחתי:<br>כמה באמת אתם מכירים אחד את השני?</h1>
+              <p class="intro-text">תענו ביחד, תתווכחו קצת, תצחקו הרבה — וגלו מי באמת מכיר את מי בבית הזה.</p>
+              <div class="hint" style="margin: 0 auto 34px; max-width: 820px;">לפני שעונים: כל אחד אומר בקול את דעתו. אם יש ויכוח קטן — מצוין, זו כנראה השאלה הנכונה.</div>
+              <button class="btn-dark start-button" onclick="startQuiz()">התחלה</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="quizScreen" class="hidden">
+        <header>
+          <div class="pill">מבחן ההיכרות המשפחתי</div>
+          <h1>עונים ביחד. מתווכחים קצת. צוחקים הרבה.</h1>
+        </header>
+
+        <div class="stage">
+          <article class="card">
+            <div class="card-inner">
+              <div class="top-row">
+                <div class="count" id="counter"></div>
+                <div class="emoji" id="emoji"></div>
+              </div>
+
+              <div>
+                <h2 id="title"></h2>
+                <p class="question" id="question"></p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <footer>
+          <div class="progress-shell">
+            <div class="progress" id="progress"></div>
+          </div>
+          <div class="buttons">
+            <button class="btn-light" onclick="prevQuestion()">הקודם</button>
+            <button class="btn-soft" onclick="backToStart()">חזרה להתחלה</button>
+            <button class="btn-dark" onclick="nextQuestion()">הבא</button>
+          </div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const questions = [
+      { n: 1, title: "מבחן הגועל", emoji: "🤢", question: "מי מהצוות הכי בררן באוכל, ומה המאכל שהוא לא יכניס לפה גם תמורת מיליון דולר ופטור מסידור מדיח לשנה?" },
+      { n: 2, title: "מבחן השנ״צ", emoji: "😴", question: "מי מסוגל להירדם במקום הכי לא הגיוני, ומה המקום הכי מוזר שבו מצאתם אותו נרדם או כמעט נרדם?" },
+      { n: 3, title: "מבחן הבלגן", emoji: "🧦", question: "מי מאבד הכי הרבה דברים בבית, ומה החפץ שכולם כבר רגילים לחפש בגללו?" },
+      { n: 4, title: "מבחן הבוקר", emoji: "☕", question: "מי הכי מסוכן לפנייה בבוקר לפני קפה, אוכל, או לפחות 12 דקות של בהייה בקיר?" },
+      { n: 5, title: "כוח העל המיותר", emoji: "🦸", question: "בחרו משתתף אחד ותנו לו כוח על מיותר במיוחד. למשל: לשמוע שקית חטיפים נפתחת מקצה הבית, להיעלם בדיוק כשצריך לעזור, או למצוא דברים רק אחרי שכולם כבר התייאשו." },
+      { n: 6, title: "מבחן הסוללה", emoji: "🪫", question: "מי חי על 1% סוללה ומחפש מטען בלחץ, למרות שהמטען היה מולו כל הזמן?" },
+      { n: 7, title: "מבחן החרקים", emoji: "🪲", question: "אירוע חירום: ג׳וק או עכביש באמבטיה. מי צורח ובורח? מי נשלח לטפל באירוע? ומי עומד בצד ונותן הוראות כאילו הוא מנהל מבצע צבאי?" },
+      { n: 8, title: "מבחן הסופר", emoji: "🛒", question: "מי קונה בסופר משהו “ליתר ביטחון”, למרות שיש כבר שלושה כאלה בבית? ומה המוצר?" },
+      { n: 9, title: "מבחן המשפט הקבוע", emoji: "💬", question: "בחרו מישהו מהצוות וכתבו את המשפט, המילה או הצליל הקבוע שלו — זה שכולם כבר יכולים לחקות מושלם." },
+      { n: 10, title: "מבחן הצחוק", emoji: "😂", question: "מי הכי סביר שיתחיל לצחוק ברגע הכי לא מתאים — בטקס, בנזיפה, בשקט מביך, או כשאסור בשום אופן לצחוק? ספרו על רגע שבו זה כמעט קרה, או לגמרי קרה." },
+      { n: 11, title: "מבחן “זה לא אני”", emoji: "👀", question: "משהו נפל, נשבר או נעלם בבית. מי הראשון שאומר “זה לא אני” עוד לפני שמישהו בכלל שאל?" },
+      { n: 12, title: "מבחן הדרמה", emoji: "🚨", question: "מי מהצוות הופך כל בעיה קטנה לאירוע בסדר גודל של חדשות מתפרצות? למשל: נגמר החלב, אין Wi‑Fi, אין מקום על הספה, או מישהו לקח לו את המטען." },
+      { n: 13, title: "מבחן הווייז האנושי", emoji: "🧭", question: "מי תמיד בטוח שהוא יודע את הדרך, גם כשהוא בבירור לא יודע את הדרך? ומי בכל זאת ממשיך להקשיב לו, למרות שכולכם כבר יודעים איך זה ייגמר?" },
+      { n: 14, title: "מבחן “רק רגע”", emoji: "⏳", question: "מי אומר “רק רגע” ואז נעלם ל־20 דקות? ומה לדעתכם הוא באמת עושה בזמן הזה?" },
+      { n: 15, title: "מבחן הישרדות משפחתית", emoji: "🏝️", question: "אם הייתם נתקעים יחד על אי בודד, מי היה מנסה לארגן את כולם, מי היה מתלונן ראשון, מי היה מוצא אוכל, מי היה מאבד את האוכל, ומי היה מציע לבנות מחנה ואז נשכב לנוח?" }
+    ];
+
+    let index = 0;
+
+    function renderQuestion() {
+      const q = questions[index];
+      document.getElementById("counter").textContent = `שאלה ${q.n} מתוך ${questions.length}`;
+      document.getElementById("emoji").textContent = q.emoji;
+      document.getElementById("title").textContent = q.title;
+      document.getElementById("question").textContent = q.question;
+      document.getElementById("progress").style.width = `${((index + 1) / questions.length) * 100}%`;
+    }
+
+    function startQuiz() {
+      document.getElementById("introScreen").classList.add("hidden");
+      document.getElementById("quizScreen").classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function backToStart() {
+      index = 0;
+      document.getElementById("quizScreen").classList.add("hidden");
+      document.getElementById("introScreen").classList.remove("hidden");
+    }
+
+    function nextQuestion() {
+      index = (index + 1) % questions.length;
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      index = (index - 1 + questions.length) % questions.length;
+      renderQuestion();
+    }
+  </script>
+</body>
+</html>
