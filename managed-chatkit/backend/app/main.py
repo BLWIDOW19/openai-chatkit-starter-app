@@ -67,6 +67,10 @@ async def create_session(request: Request) -> JSONResponse:
                 json={
     "workflow": {"id": workflow_id},
     "user": user_id,
+    "expires_after": {
+        "anchor": "created_at",
+        "seconds": 7200
+    },
     "chatkit_configuration": {
         "file_upload": {
             "enabled": True

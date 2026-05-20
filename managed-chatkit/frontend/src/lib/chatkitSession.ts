@@ -13,8 +13,13 @@ export function createClientSecretFetcher(
   workflow: string,
   endpoint = `${import.meta.env.VITE_API_URL || ""}/api/create-session`
 ) {
+  let secretExpiry: number | null = null;
+
   return async (currentSecret: string | null) => {
-    if (currentSecret) return currentSecret;
+    const now = Date.now() / 1000;
+    const isExpired = secretExpiry !== null && now > secretExpiry - 300;
+
+    if (currentSecret && !isExpired) return currentSecret;
 
     const urlParams = new URLSearchParams(window.location.search);
     const groupId = urlParams.get("group");
@@ -30,6 +35,7 @@ export function createClientSecretFetcher(
 
     const payload = (await response.json().catch(() => ({}))) as {
       client_secret?: string;
+      expires_after?: { unix: number } | number;
       error?: string;
     };
 
@@ -39,6 +45,13 @@ export function createClientSecretFetcher(
 
     if (!payload.client_secret) {
       throw new Error("Missing client secret in response");
+    }
+
+    if (payload.expires_after) {
+      secretExpiry =
+        typeof payload.expires_after === "number"
+          ? payload.expires_after
+          : payload.expires_after.unix;
     }
 
     return payload.client_secret;
