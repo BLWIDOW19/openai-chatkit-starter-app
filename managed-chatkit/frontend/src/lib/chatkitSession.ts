@@ -47,12 +47,7 @@ export function createClientSecretFetcher(
       throw new Error("Missing client secret in response");
     }
 
-    if (payload.expires_after) {
-      secretExpiry =
-        typeof payload.expires_after === "number"
-          ? payload.expires_after
-          : payload.expires_after.unix;
-    }
+    secretExpiry = Date.now() / 1000 + 540;
 
     return payload.client_secret;
   };
